@@ -1,2 +1,2 @@
 # 📚 Casebound
-Visualize your digital book shelves!
+Visualize your digital bookshelves!
