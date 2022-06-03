@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import HelloWorld from "./components/HelloWorld.vue";
 import TheWelcome from "./components/TheWelcome.vue";
+console.log(import.meta.env.VITE_LITERAL_PROFILE_ID);
 </script>
 
 <template>
