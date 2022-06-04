@@ -1,27 +1,12 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
-import TheWelcome from "./components/TheWelcome.vue";
-console.log(import.meta.env.VITE_LITERAL_PROFILE_ID);
+import { ref } from "vue";
+import Book from "./components/Book.vue";
+
+const id = ref(import.meta.env.VITE_LITERAL_PROFILE_ID);
 </script>
 
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="./assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <Book title="The Hobbit" cover="https://assets.literal.club/4/ckr1ubxrs1a8z01cr8q6xslqc.jpg" />
 </template>
 
 <style>
