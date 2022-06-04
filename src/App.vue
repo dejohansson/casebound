@@ -1,12 +1,53 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { type ApolloClient, type NormalizedCacheObject, gql } from "@apollo/client/core";
+import { inject, onMounted, ref } from "vue";
+import { LiteralClientKey } from "./injectionKeys";
 import Book from "./components/Book.vue";
 
-const id = ref(import.meta.env.VITE_LITERAL_PROFILE_ID);
+const id = import.meta.env.VITE_LITERAL_PROFILE_ID;
+const apolloClient = inject(LiteralClientKey) as ApolloClient<NormalizedCacheObject>;
+const title = ref("");
+const cover = ref("");
+
+onMounted(async () => {
+  const res = (
+    await apolloClient.query({
+      query: gql`
+        query booksByReadingStateAndProfile(
+          $limit: Int!
+          $offset: Int!
+          $readingStatus: ReadingStatus!
+          $profileId: String!
+        ) {
+          booksByReadingStateAndProfile(
+            limit: $limit
+            offset: $offset
+            readingStatus: $readingStatus
+            profileId: $profileId
+          ) {
+            title
+            cover
+          }
+        }
+      `,
+      variables: {
+        limit: 300,
+        offset: 0,
+        readingStatus: "FINISHED",
+        profileId: id,
+      },
+    })
+  ).data;
+
+  title.value = res.booksByReadingStateAndProfile[0].title;
+  cover.value = res.booksByReadingStateAndProfile[0].cover;
+
+  console.log(title, cover);
+});
 </script>
 
 <template>
-  <Book title="The Hobbit" cover="https://assets.literal.club/4/ckr1ubxrs1a8z01cr8q6xslqc.jpg" />
+  <Book :title="title" :cover="cover" />
 </template>
 
 <style>
