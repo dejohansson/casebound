@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { type ApolloClient, type NormalizedCacheObject, gql } from "@apollo/client/core";
+import {
+  type ApolloClient,
+  type NormalizedCacheObject,
+  gql,
+} from "@apollo/client/core";
 import { inject, onMounted, ref } from "vue";
 import { LiteralClientKey } from "./injectionKeys";
-import Book from "./components/Book.vue";
+import BookItem from "./components/BookItem.vue";
 
 const id = import.meta.env.VITE_LITERAL_PROFILE_ID;
-const apolloClient = inject(LiteralClientKey) as ApolloClient<NormalizedCacheObject>;
+const apolloClient = inject(
+  LiteralClientKey
+) as ApolloClient<NormalizedCacheObject>;
 const title = ref("");
 const cover = ref("");
 
@@ -31,7 +37,7 @@ onMounted(async () => {
         }
       `,
       variables: {
-        limit: 300,
+        limit: 100,
         offset: 0,
         readingStatus: "FINISHED",
         profileId: id,
@@ -47,7 +53,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Book :title="title" :cover="cover" />
+  <BookItem :title="title" :cover="cover" />
 </template>
 
 <style>
