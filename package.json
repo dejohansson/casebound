@@ -16,7 +16,7 @@
   "dependencies": {
     "@apollo/client": "^3.6.6",
     "graphql": "^16.5.0",
-    "vue": "^3.2.36"
+    "vue": "^3.2.37"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
