@@ -11,8 +11,8 @@ updates:
       interval: "monthly"
       
   - package-ecosystem: "npm"
-   directory: "/"
-   schedule:
-     interval: "weekly"
-   allow:
-     - dependency-type: "production"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    allow:
+      - dependency-type: "production"
