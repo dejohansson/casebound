@@ -8,4 +8,11 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "monthly"
+      
+  - package-ecosystem: "npm"
+   directory: "/"
+   schedule:
+     interval: "weekly"
+   allow:
+     - dependency-type: "production"
