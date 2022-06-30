@@ -10,7 +10,7 @@ defineProps<{
 
 <style scoped>
 img {
-  height: 300px;
-  width: 190px;
+  height: 265px;
+  width: 180px;
 }
 </style>
