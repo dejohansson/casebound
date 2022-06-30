@@ -1,9 +1,8 @@
 import { ApolloClient, gql, InMemoryCache, type NormalizedCacheObject } from "@apollo/client/core";
 import type BooksByReadingStateAndProfileData from "./models/booksByReadingStateAndProfileData";
 import type BooksByReadingStateAndProfileVariables from "./models/booksByReadingStateAndProfileVariables";
-import type ReadingStatus from "./models/readingStatus";
 
-export class LiteralApiClient {
+export default class LiteralApiClient {
   readonly #apolloClient: ApolloClient<NormalizedCacheObject>;
 
   constructor() {
@@ -14,7 +13,7 @@ export class LiteralApiClient {
   }
 
   async getCoversByReadingStateAndProfile(
-    varaibles: BooksByReadingStateAndProfileVariables
+    variables: BooksByReadingStateAndProfileVariables
   ): Promise<string[]> {
     return (
       await this.#apolloClient.query<
@@ -38,7 +37,7 @@ export class LiteralApiClient {
             }
           }
         `,
-        variables: varaibles,
+        variables: variables,
       })
     ).data.booksByReadingStateAndProfile.map((b) => b.cover);
   }
