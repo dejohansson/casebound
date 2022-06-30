@@ -2,8 +2,8 @@
 import { inject, onMounted, ref } from "vue";
 import { LiteralApiClientKey } from "./injectionKeys";
 import BookItem from "./components/BookItem.vue";
-import type { LiteralApiClient } from "./literal/literalApiClient";
 import ReadingStatus from "./literal/models/readingStatus";
+import type LiteralApiClient from "./literal/literalApiClient";
 
 const id = import.meta.env.VITE_LITERAL_PROFILE_ID;
 const literalClient = inject(LiteralApiClientKey) as LiteralApiClient;
