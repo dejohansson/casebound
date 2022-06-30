@@ -1,16 +1,11 @@
 import { createApp, provide, h } from "vue";
 import App from "./App.vue";
-import { LiteralClientKey } from "./injectionKeys";
-import { ApolloClient, InMemoryCache } from "@apollo/client/core";
-
-const apolloClient = new ApolloClient({
-  uri: "https://literal.club/graphql",
-  cache: new InMemoryCache(),
-});
+import { LiteralApiClientKey } from "./injectionKeys";
+import { LiteralApiClient } from "./literal/literalApiClient";
 
 createApp({
   setup() {
-    provide(LiteralClientKey, apolloClient);
+    provide(LiteralApiClientKey, new LiteralApiClient());
   },
   render: () => h(App),
 }).mount("#app");

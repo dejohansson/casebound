@@ -1,12 +1,16 @@
 <script setup lang="ts">
 defineProps<{
-  title: string;
   cover: string;
 }>();
 </script>
 
 <template>
-  <img :src="cover" :alt="title" />
+  <img :src="cover" />
 </template>
 
-<style scoped></style>
+<style scoped>
+img {
+  height: 300px;
+  width: 190px;
+}
+</style>
