@@ -1,6 +1,4 @@
 import type { InjectionKey } from "vue";
-import type { ApolloClient, NormalizedCacheObject } from "@apollo/client/core";
+import type { LiteralApiClient } from "./literal/literalApiClient";
 
-export const LiteralClientKey = Symbol("LiteralClient") as InjectionKey<
-  ApolloClient<NormalizedCacheObject>
->;
+export const LiteralApiClientKey = Symbol("LiteralClient") as InjectionKey<LiteralApiClient>;
