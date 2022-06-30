@@ -10,12 +10,10 @@ const literalClient = inject(LiteralApiClientKey) as LiteralApiClient;
 const covers = ref();
 
 onMounted(async () => {
-  covers.value = await literalClient.getCoversByReadingStateAndProfile({
-    limit: 100,
-    offset: 0,
-    readingStatus: ReadingStatus.FINISHED,
-    profileId: id,
-  });
+  covers.value = await literalClient.getAllCoversByReadingStateAndProfile(
+    ReadingStatus.FINISHED,
+    id
+  );
 });
 </script>
 
@@ -27,9 +25,8 @@ onMounted(async () => {
 @import "./assets/base.css";
 
 #app {
-  padding: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 190px);
+  grid-template-columns: repeat(auto-fill, 180px);
   justify-content: space-between;
 }
 </style>
