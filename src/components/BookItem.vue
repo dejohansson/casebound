@@ -8,8 +8,8 @@ defineProps<{
 
 const styles = computed(() => {
   return {
-    left: `${getRandomInt(0, 1920)}px`,
-    top: `${getRandomInt(0, 1080)}px`,
+    left: `${getRandomInt(0, window.outerWidth)}px`,
+    top: `${getRandomInt(0, window.outerHeight)}px`,
     '--z-index': `${getRandomInt(0, 700)}`,
   };
 });
