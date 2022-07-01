@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { inject, onMounted, ref } from "vue";
-import { LiteralApiClientKey } from "./injectionKeys";
-import BookItem from "./components/BookItem.vue";
-import ReadingStatus from "./literal/models/readingStatus";
-import type LiteralApiClient from "./literal/literalApiClient";
+import { inject, onMounted, ref } from 'vue';
+import { LiteralApiClientKey } from './injectionKeys';
+import BookItem from './components/BookItem.vue';
+import ReadingStatus from './literal/models/readingStatus';
+import type LiteralApiClient from './literal/literalApiClient';
 
 const id = import.meta.env.VITE_LITERAL_PROFILE_ID;
 const literalClient = inject(LiteralApiClientKey) as LiteralApiClient;
@@ -22,11 +22,5 @@ onMounted(async () => {
 </template>
 
 <style>
-@import "./assets/base.css";
-
-#app {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 180px);
-  justify-content: space-between;
-}
+@import './assets/base.css';
 </style>
