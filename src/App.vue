@@ -13,7 +13,13 @@ const nBooks = ref(
   Math.ceil((window.outerWidth * window.outerHeight) / 200000)
 );
 
-onMounted(() => window.addEventListener('resize', setBookCount));
+onMounted(async () => {
+  window.addEventListener('resize', setBookCount);
+  covers.value = await literalClient.getAllCoversByReadingStateAndProfile(
+    ReadingStatus.FINISHED,
+    id
+  );
+});
 
 onUnmounted(() => window.removeEventListener('resize', setBookCount));
 
@@ -25,20 +31,21 @@ function setBookCount() {
   nBooks.value = Math.ceil((window.outerWidth * window.outerHeight) / 200000);
 }
 
-onMounted(async () => {
-  covers.value = await literalClient.getAllCoversByReadingStateAndProfile(
-    ReadingStatus.FINISHED,
-    id
-  );
-});
-
 function getNextCover() {
   return covers.value[getRandomInt(0, covers.value.length - 1)];
 }
+
+console.log(covers.value);
 </script>
 
 <template>
-  <BookItem v-for="index in 1" :key="index" :getNextCover="getNextCover" />
+  <BookItem
+    v-if="covers.length > 0"
+    v-for="index in nBooks"
+    :key="index"
+    :getNextCover="getNextCover"
+    :initialDelay="index"
+  />
 </template>
 
 <style>

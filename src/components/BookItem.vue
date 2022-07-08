@@ -1,47 +1,64 @@
 <script setup lang="ts">
 import { getRandomInt } from '@/helpers';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 const props = defineProps<{
   getNextCover: () => string;
+  initialDelay: number;
 }>();
 
 const cover = ref(props.getNextCover());
 
-setInterval(() => {
+const show = ref(false);
+
+setTimeout(() => {
+  show.value = true;
+}, props.initialDelay * 1000);
+
+setTimeout(() => {
+  newBook();
+}, props.initialDelay * 1000 + 10000);
+
+function newBook() {
+  show.value = false;
   cover.value = props.getNextCover();
-}, 1000); //getRandomInt(1000, 25000));
+  setTimeout(() => {
+    show.value = true;
+    setTimeout(() => {
+      newBook();
+    }, 10000);
+  }, 1);
+}
 
 const styles = computed(() => {
   return {
-    // left: `${getRandomInt(0, window.outerWidth)}px`,
-    // top: `${getRandomInt(0, window.outerHeight)}px`,
-    // '--z-index': `${getRandomInt(0, 700)}`,
+    top: `${getRandomInt(
+      -window.outerHeight * 0.2,
+      window.outerHeight * 0.8
+    )}px`,
+    '--z-index': `${getRandomInt(0, 700)}`,
   };
 });
 </script>
 
 <template>
-  <transition name="hej">
-    <img v-if="true" :src="cover" :style="styles" />
+  <transition name="slide">
+    <img v-if="show" :src="cover" :style="styles" />
   </transition>
 </template>
 
 <style scoped>
 img {
-  margin-top: -100px;
-  margin-left: -80px;
-  max-width: 180px;
-  /* position: absolute; */
-  /* z-index: var(--z-index); */
+  max-height: 30vh;
+  max-width: 60vw;
+  position: absolute;
+  z-index: var(--z-index);
+  transform: translateX(-100%);
 }
-.hej-enter-from {
-  transform: translateX(20px);
+.slide-enter-to {
+  transform: translateX(100vw);
 }
-.hej-enter-to {
-  transform: translateX(1000px);
-}
-.hej-enter-active {
-  transition: 10s;
+.slide-enter-active {
+  transition: transform 10s linear;
 }
 </style>
