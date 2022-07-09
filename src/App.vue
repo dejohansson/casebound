@@ -24,7 +24,7 @@ onMounted(async () => {
 onUnmounted(() => window.removeEventListener('resize', setBookCount));
 
 watch(nBooks, (nBooks, _) => {
-  console.log(nBooks);
+  console.log('Books' + nBooks);
 });
 
 function setBookCount() {
@@ -34,8 +34,6 @@ function setBookCount() {
 function getNextCover() {
   return covers.value[getRandomInt(0, covers.value.length - 1)];
 }
-
-console.log(covers.value);
 </script>
 
 <template>

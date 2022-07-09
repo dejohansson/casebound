@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getRandomInt } from '@/helpers';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 const props = defineProps<{
   getNextCover: () => string;
@@ -8,8 +8,18 @@ const props = defineProps<{
 }>();
 
 const cover = ref(props.getNextCover());
-
 const show = ref(false);
+const animationSpeed = ref(Math.ceil(window.outerWidth / 100));
+
+onMounted(async () => {
+  window.addEventListener('resize', setAnimationSpeed);
+});
+
+onUnmounted(() => window.removeEventListener('resize', setAnimationSpeed));
+
+function setAnimationSpeed() {
+  animationSpeed.value = Math.ceil(window.outerWidth / 100);
+}
 
 setTimeout(() => {
   show.value = true;
@@ -17,7 +27,7 @@ setTimeout(() => {
 
 setTimeout(() => {
   newBook();
-}, props.initialDelay * 1000 + 10000);
+}, props.initialDelay * 1000 + animationSpeed.value * 1000);
 
 function newBook() {
   show.value = false;
@@ -26,7 +36,7 @@ function newBook() {
     show.value = true;
     setTimeout(() => {
       newBook();
-    }, 10000);
+    }, animationSpeed.value * 1000);
   }, 1);
 }
 
@@ -37,6 +47,7 @@ const styles = computed(() => {
       window.outerHeight * 0.8
     )}px`,
     '--z-index': `${getRandomInt(0, 700)}`,
+    '--slide-speed': `${animationSpeed.value}s`,
   };
 });
 </script>
@@ -59,6 +70,7 @@ img {
   transform: translateX(100vw);
 }
 .slide-enter-active {
-  transition: transform 10s linear;
+  transition: transform var(--slide-speed) linear;
 }
 </style>
+5
