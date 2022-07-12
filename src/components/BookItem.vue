@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { getRandomInt } from '@/helpers';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch, type Ref } from 'vue';
 
 const props = defineProps<{
-  getNextCover: () => string;
+  coverGenerator: Generator<string, string, string>;
   initialDelay: number;
 }>();
 
-const cover = ref(props.getNextCover());
+const cover: Ref<string> = ref(props.coverGenerator.next().value);
 const show = ref(false);
-const animationSpeed = ref(Math.ceil(window.outerWidth / 100));
+const animationSpeed = ref(
+  (Math.ceil(window.outerWidth / 40) * getRandomInt(85, 115)) / 100
+);
 
 onMounted(async () => {
   window.addEventListener('resize', setAnimationSpeed);
@@ -18,20 +20,21 @@ onMounted(async () => {
 onUnmounted(() => window.removeEventListener('resize', setAnimationSpeed));
 
 function setAnimationSpeed() {
-  animationSpeed.value = Math.ceil(window.outerWidth / 100);
+  animationSpeed.value =
+    (Math.ceil(window.outerWidth / 40) * getRandomInt(85, 115)) / 100;
 }
 
 setTimeout(() => {
   show.value = true;
-}, props.initialDelay * 1000);
+}, props.initialDelay * 1000 * animationSpeed.value);
 
 setTimeout(() => {
   newBook();
-}, props.initialDelay * 1000 + animationSpeed.value * 1000);
+}, (props.initialDelay + 1) * 1000 * animationSpeed.value);
 
 function newBook() {
   show.value = false;
-  cover.value = props.getNextCover();
+  cover.value = props.coverGenerator.next().value;
   setTimeout(() => {
     show.value = true;
     setTimeout(() => {
@@ -42,10 +45,7 @@ function newBook() {
 
 const styles = computed(() => {
   return {
-    top: `${getRandomInt(
-      -window.outerHeight * 0.2,
-      window.outerHeight * 0.8
-    )}px`,
+    top: `${getRandomInt(0, window.outerHeight)}px`,
     '--z-index': `${getRandomInt(0, 700)}`,
     '--slide-speed': `${animationSpeed.value}s`,
   };
@@ -64,10 +64,10 @@ img {
   max-width: 60vw;
   position: absolute;
   z-index: var(--z-index);
-  transform: translateX(-100%);
+  transform: translate(-100%, -50%);
 }
 .slide-enter-to {
-  transform: translateX(100vw);
+  transform: translate(100vw, -50%);
 }
 .slide-enter-active {
   transition: transform var(--slide-speed) linear;
