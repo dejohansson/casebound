@@ -4,13 +4,16 @@ import { LiteralApiClientKey } from './injectionKeys';
 import BookItem from './components/BookItem.vue';
 import ReadingStatus from './literal/models/readingStatus';
 import type LiteralApiClient from './literal/literalApiClient';
-import { getRandomInt } from './helpers';
+import { shuffle } from './helpers';
 
 const id = import.meta.env.VITE_LITERAL_PROFILE_ID;
 const literalClient = inject(LiteralApiClientKey) as LiteralApiClient;
 const covers: Ref<string[]> = ref([]);
 const nBooks = ref(
-  Math.ceil((window.outerWidth * window.outerHeight) / 200000)
+  Math.ceil((window.outerWidth * window.outerHeight) / 100000)
+);
+const coverGeneratorInstnace: Ref<Generator<string, string, string>> = ref(
+  coverGenerator()
 );
 
 onMounted(async () => {
@@ -28,11 +31,17 @@ watch(nBooks, (nBooks, _) => {
 });
 
 function setBookCount() {
-  nBooks.value = Math.ceil((window.outerWidth * window.outerHeight) / 200000);
+  nBooks.value = Math.ceil((window.outerWidth * window.outerHeight) / 100000);
 }
 
-function getNextCover() {
-  return covers.value[getRandomInt(0, covers.value.length - 1)];
+function* coverGenerator(): Generator<string, string, string> {
+  while (true) {
+    shuffle(covers.value);
+    var i = 1;
+    for (const cover of covers.value) {
+      yield cover;
+    }
+  }
 }
 </script>
 
@@ -41,8 +50,8 @@ function getNextCover() {
     v-if="covers.length > 0"
     v-for="index in nBooks"
     :key="index"
-    :getNextCover="getNextCover"
-    :initialDelay="index"
+    :coverGenerator="coverGeneratorInstnace"
+    :initialDelay="index / nBooks"
   />
 </template>
 
