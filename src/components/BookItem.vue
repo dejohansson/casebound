@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { getRandomInt } from '@/helpers';
+import type Book from '@/models/book';
 import { computed, onMounted, onUnmounted, ref, watch, type Ref } from 'vue';
 
 const props = defineProps<{
-  coverGenerator: Generator<string, string, string>;
+  bookGenerator: Generator<Book, Book, Book>;
   initialDelay: number;
 }>();
 
-const cover: Ref<string> = ref(props.coverGenerator.next().value);
+const book: Ref<Book> = ref(props.bookGenerator.next().value);
 const show = ref(false);
 const animationSpeed = ref(
   (Math.ceil(window.outerWidth / 40) * getRandomInt(85, 115)) / 100
@@ -34,7 +35,7 @@ setTimeout(() => {
 
 function newBook() {
   show.value = false;
-  cover.value = props.coverGenerator.next().value;
+  book.value = props.bookGenerator.next().value;
   setTimeout(() => {
     show.value = true;
     setTimeout(() => {
@@ -46,7 +47,7 @@ function newBook() {
 const styles = computed(() => {
   return {
     top: `${getRandomInt(0, window.outerHeight)}px`,
-    '--z-index': `${getRandomInt(0, 700)}`,
+    '--z-index': book.value.weight,
     '--slide-speed': `${animationSpeed.value}s`,
   };
 });
@@ -54,7 +55,7 @@ const styles = computed(() => {
 
 <template>
   <transition name="slide">
-    <img v-if="show" :src="cover" :style="styles" />
+    <img v-if="show" :src="book.cover" :style="styles" />
   </transition>
 </template>
 
