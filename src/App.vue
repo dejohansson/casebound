@@ -5,20 +5,21 @@ import BookItem from './components/BookItem.vue';
 import ReadingStatus from './literal/models/readingStatus';
 import type LiteralApiClient from './literal/literalApiClient';
 import { shuffle } from './helpers';
+import type Book from './models/book';
 
 const id = import.meta.env.VITE_LITERAL_PROFILE_ID;
 const literalClient = inject(LiteralApiClientKey) as LiteralApiClient;
-const covers: Ref<string[]> = ref([]);
+const books: Ref<Book[]> = ref([]);
 const nBooks = ref(
-  Math.ceil((window.outerWidth * window.outerHeight) / 100000)
+  Math.ceil((window.outerWidth * window.outerHeight) / 150000)
 );
-const coverGeneratorInstnace: Ref<Generator<string, string, string>> = ref(
-  coverGenerator()
+const bookGeneratorInstance: Ref<Generator<Book, Book, Book>> = ref(
+  bookGenerator()
 );
 
 onMounted(async () => {
   window.addEventListener('resize', setBookCount);
-  covers.value = await literalClient.getAllCoversByReadingStateAndProfile(
+  books.value = await literalClient.getAllCoversByReadingStateAndProfile(
     ReadingStatus.FINISHED,
     id
   );
@@ -31,15 +32,14 @@ watch(nBooks, (nBooks, _) => {
 });
 
 function setBookCount() {
-  nBooks.value = Math.ceil((window.outerWidth * window.outerHeight) / 100000);
+  nBooks.value = Math.ceil((window.outerWidth * window.outerHeight) / 150000);
 }
 
-function* coverGenerator(): Generator<string, string, string> {
+function* bookGenerator(): Generator<Book, Book, Book> {
   while (true) {
-    shuffle(covers.value);
-    var i = 1;
-    for (const cover of covers.value) {
-      yield cover;
+    shuffle(books.value);
+    for (const book of books.value) {
+      yield book;
     }
   }
 }
@@ -47,10 +47,10 @@ function* coverGenerator(): Generator<string, string, string> {
 
 <template>
   <BookItem
-    v-if="covers.length > 0"
+    v-if="books.length > 0"
     v-for="index in nBooks"
     :key="index"
-    :coverGenerator="coverGeneratorInstnace"
+    :bookGenerator="bookGeneratorInstance"
     :initialDelay="index / nBooks"
   />
 </template>

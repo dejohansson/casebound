@@ -1,14 +1,23 @@
-import { ApolloClient, gql, InMemoryCache, type NormalizedCacheObject } from "@apollo/client/core";
-import type BooksByReadingStateAndProfileData from "./models/booksByReadingStateAndProfileData";
-import type BooksByReadingStateAndProfileVariables from "./models/booksByReadingStateAndProfileVariables";
-import type ReadingStatus from "./models/readingStatus";
+import type Book from '@/models/book';
+import {
+  ApolloClient,
+  gql,
+  InMemoryCache,
+  type NormalizedCacheObject,
+} from '@apollo/client/core';
+import type LiteralBook from './models/book';
+import type BooksByReadingStateAndProfileData from './models/booksByReadingStateAndProfileData';
+import type BooksByReadingStateAndProfileVariables from './models/booksByReadingStateAndProfileVariables';
+import type QueryReviewsData from './models/queryReviewsData';
+import type { QueryReviewsVariables } from './models/queryReviewsVariables';
+import type ReadingStatus from './models/readingStatus';
 
 export default class LiteralApiClient {
   readonly #apolloClient: ApolloClient<NormalizedCacheObject>;
 
   constructor() {
     this.#apolloClient = new ApolloClient({
-      uri: "https://literal.club/graphql",
+      uri: 'https://literal.club/graphql',
       cache: new InMemoryCache(),
     });
   }
@@ -16,29 +25,37 @@ export default class LiteralApiClient {
   async getAllCoversByReadingStateAndProfile(
     readingStatus: ReadingStatus,
     profileId: string
-  ): Promise<string[]> {
+  ): Promise<Book[]> {
     const batchSize = 100;
-    const covers: string[] = [];
+    const books: Book[] = [];
     var offset = 0;
 
     do {
-      var batch = await this.getCoversByReadingStateAndProfile({
+      var literalBookBatch = await this.getCoversByReadingStateAndProfile({
         limit: batchSize,
         offset: offset,
         readingStatus: readingStatus,
         profileId: profileId,
       });
 
-      covers.push(...batch);
-      offset += batchSize;
-    } while (batch.length == batchSize);
+      var ratings = await this.getRatingsByBookIdsAndProfile(
+        profileId,
+        literalBookBatch.map((b) => b.id)
+      );
 
-    return covers;
+      literalBookBatch.forEach((book, index) => {
+        books.push({ cover: book.cover, weight: ratings[index] * 100 });
+      });
+
+      offset += batchSize;
+    } while (literalBookBatch.length == batchSize);
+
+    return books;
   }
 
   async getCoversByReadingStateAndProfile(
     variables: BooksByReadingStateAndProfileVariables
-  ): Promise<string[]> {
+  ): Promise<LiteralBook[]> {
     return (
       await this.#apolloClient.query<
         BooksByReadingStateAndProfileData,
@@ -57,12 +74,36 @@ export default class LiteralApiClient {
               readingStatus: $readingStatus
               profileId: $profileId
             ) {
+              id
               cover
             }
           }
         `,
         variables: variables,
       })
-    ).data.booksByReadingStateAndProfile.map((b) => b.cover);
+    ).data.booksByReadingStateAndProfile;
+  }
+
+  async getRatingsByBookIdsAndProfile(
+    profileId: string,
+    bookIds: string[]
+  ): Promise<number[]> {
+    return (
+      await this.#apolloClient.query<QueryReviewsData, QueryReviewsVariables>({
+        query: gql`
+          query reviews($pairs: [ProfileIdBookIdInput!]!) {
+            reviews(pairs: $pairs) {
+              rating
+            }
+          }
+        `,
+        variables: {
+          pairs: bookIds.map((bookId) => ({
+            profileId: profileId,
+            bookId: bookId,
+          })),
+        },
+      })
+    ).data.reviews.map((r) => r.rating);
   }
 }
