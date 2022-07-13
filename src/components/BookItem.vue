@@ -5,13 +5,14 @@ import { computed, onMounted, onUnmounted, ref, watch, type Ref } from 'vue';
 
 const props = defineProps<{
   bookGenerator: Generator<Book, Book, Book>;
+  yPosGenerator: Generator<number, number, number>;
   initialDelay: number;
 }>();
 
 const book: Ref<Book> = ref(props.bookGenerator.next().value);
 const show = ref(false);
 const animationSpeed = ref(
-  (Math.ceil(window.outerWidth / 40) * getRandomInt(85, 115)) / 100
+  (Math.ceil(window.outerWidth / 40) * getRandomInt(90, 110)) / 100
 );
 
 onMounted(async () => {
@@ -22,7 +23,7 @@ onUnmounted(() => window.removeEventListener('resize', setAnimationSpeed));
 
 function setAnimationSpeed() {
   animationSpeed.value =
-    (Math.ceil(window.outerWidth / 40) * getRandomInt(85, 115)) / 100;
+    (Math.ceil(window.outerWidth / 40) * getRandomInt(90, 110)) / 100;
 }
 
 setTimeout(() => {
@@ -46,7 +47,7 @@ function newBook() {
 
 const styles = computed(() => {
   return {
-    top: `${getRandomInt(0, window.outerHeight)}px`,
+    top: `${props.yPosGenerator.next().value}px`,
     '--z-index': book.value.weight,
     '--slide-speed': `${animationSpeed.value}s`,
   };
