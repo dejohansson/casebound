@@ -4,7 +4,7 @@ import { LiteralApiClientKey } from './injectionKeys';
 import BookItem from './components/BookItem.vue';
 import ReadingStatus from './literal/models/readingStatus';
 import type LiteralApiClient from './literal/literalApiClient';
-import { shuffle } from './helpers';
+import { shuffle, vdc } from './helpers';
 import type Book from './models/book';
 
 const id = import.meta.env.VITE_LITERAL_PROFILE_ID;
@@ -15,6 +15,9 @@ const nBooks = ref(
 );
 const bookGeneratorInstance: Ref<Generator<Book, Book, Book>> = ref(
   bookGenerator()
+);
+const yPosGeneratorInstance: Ref<Generator<number, number, number>> = ref(
+  yPosGenerator()
 );
 
 onMounted(async () => {
@@ -43,6 +46,13 @@ function* bookGenerator(): Generator<Book, Book, Book> {
     }
   }
 }
+
+function* yPosGenerator(): Generator<number, number, number> {
+  var vdcGen = vdc();
+  while (true) {
+    yield vdcGen.next().value * window.outerHeight;
+  }
+}
 </script>
 
 <template>
@@ -51,6 +61,7 @@ function* bookGenerator(): Generator<Book, Book, Book> {
     v-for="index in nBooks"
     :key="index"
     :bookGenerator="bookGeneratorInstance"
+    :yPosGenerator="yPosGeneratorInstance"
     :initialDelay="index / nBooks"
   />
 </template>
