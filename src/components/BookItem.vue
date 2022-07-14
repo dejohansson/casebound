@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getRandomInt } from '@/helpers';
 import type Book from '@/models/book';
-import { computed, onMounted, onUnmounted, ref, watch, type Ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, type Ref } from 'vue';
 
 const props = defineProps<{
   bookGenerator: Generator<Book, Book, Book>;

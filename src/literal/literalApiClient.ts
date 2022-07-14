@@ -44,7 +44,7 @@ export default class LiteralApiClient {
       );
 
       literalBookBatch.forEach((book, index) => {
-        books.push({ cover: book.cover, weight: ratings[index] * 100 });
+        books.push({ cover: book.cover, weight: ratings[index] * 20 });
       });
 
       offset += batchSize;
