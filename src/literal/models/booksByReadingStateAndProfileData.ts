@@ -1,4 +1,4 @@
-import type Book from "./book";
+import type Book from './book';
 
 export default interface BooksByReadingStateAndProfileData {
   booksByReadingStateAndProfile: Book[];

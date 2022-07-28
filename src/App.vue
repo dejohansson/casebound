@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted, onUnmounted, ref, watch, type Ref } from 'vue';
+import { inject, onMounted, onUnmounted, ref, type Ref } from 'vue';
 import { LiteralApiClientKey } from './injectionKeys';
 import BookItem from './components/BookItem.vue';
 import ReadingStatus from './literal/models/readingStatus';
@@ -30,10 +30,6 @@ onMounted(async () => {
 
 onUnmounted(() => window.removeEventListener('resize', setBookCount));
 
-watch(nBooks, (nBooks, _) => {
-  console.log('Books' + nBooks);
-});
-
 function setBookCount() {
   nBooks.value = Math.ceil((window.outerWidth * window.outerHeight) / 150000);
 }
@@ -48,7 +44,7 @@ function* bookGenerator(): Generator<Book, Book, Book> {
 }
 
 function* yPosGenerator(): Generator<number, number, number> {
-  var vdcGen = vdc();
+  const vdcGen = vdc();
   while (true) {
     yield vdcGen.next().value * window.outerHeight;
   }
@@ -56,14 +52,15 @@ function* yPosGenerator(): Generator<number, number, number> {
 </script>
 
 <template>
-  <BookItem
-    v-if="books.length > 0"
-    v-for="index in nBooks"
-    :key="index"
-    :bookGenerator="bookGeneratorInstance"
-    :yPosGenerator="yPosGeneratorInstance"
-    :initialDelay="index / nBooks"
-  />
+  <div v-if="books.length > 0">
+    <BookItem
+      v-for="index in nBooks"
+      :key="index"
+      :bookGenerator="bookGeneratorInstance"
+      :yPosGenerator="yPosGeneratorInstance"
+      :initialDelay="index / nBooks"
+    />
+  </div>
 </template>
 
 <style>

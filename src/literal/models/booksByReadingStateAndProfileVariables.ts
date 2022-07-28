@@ -1,4 +1,4 @@
-import type ReadingStatus from "./readingStatus";
+import type ReadingStatus from './readingStatus';
 
 export default interface BooksByReadingStateAndProfileVariables {
   limit: number;

@@ -28,27 +28,29 @@ export default class LiteralApiClient {
   ): Promise<Book[]> {
     const batchSize = 100;
     const books: Book[] = [];
-    var offset = 0;
+    let offset = 0;
 
     do {
-      var literalBookBatch = await this.getCoversByReadingStateAndProfile({
+      const literalBookBatch = await this.getCoversByReadingStateAndProfile({
         limit: batchSize,
         offset: offset,
         readingStatus: readingStatus,
         profileId: profileId,
       });
 
-      var ratings = await this.getRatingsByBookIdsAndProfile(
+      const ratings = await this.getRatingsByBookIdsAndProfile(
         profileId,
         literalBookBatch.map((b) => b.id)
       );
 
       literalBookBatch.forEach((book, index) => {
-        books.push({ cover: book.cover, weight: ratings[index] * 20 });
+        books.push({ cover: book.cover, weight: (ratings[index] ?? 2.5) * 20 });
       });
 
+      console.log(books);
+
       offset += batchSize;
-    } while (literalBookBatch.length == batchSize);
+    } while (books.length % batchSize === 0);
 
     return books;
   }
@@ -104,6 +106,6 @@ export default class LiteralApiClient {
           })),
         },
       })
-    ).data.reviews.map((r) => r.rating);
+    ).data.reviews.map((r) => r?.rating);
   }
 }

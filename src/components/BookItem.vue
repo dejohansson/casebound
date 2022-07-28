@@ -45,10 +45,16 @@ function newBook() {
   }, 1);
 }
 
+console.log(window.innerHeight / window.innerWidth);
+
 const styles = computed(() => {
   return {
     top: `${props.yPosGenerator.next().value}px`,
-    '--z-index': book.value.weight,
+    'max-width': `${
+      (5 + 15 * (book.value.weight / 100)) *
+      (window.outerHeight / window.outerWidth)
+    }vw`,
+    'z-index': book.value.weight,
     '--slide-speed': `${animationSpeed.value}s`,
   };
 });
@@ -62,10 +68,8 @@ const styles = computed(() => {
 
 <style scoped>
 img {
-  max-height: 30vh;
-  max-width: 60vw;
+  max-height: 50vh;
   position: absolute;
-  z-index: var(--z-index);
   transform: translate(-100%, -50%);
 }
 .slide-enter-to {
