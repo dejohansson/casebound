@@ -47,8 +47,6 @@ export default class LiteralApiClient {
         books.push({ cover: book.cover, weight: (ratings[index] ?? 2.5) * 20 });
       });
 
-      console.log(books);
-
       offset += batchSize;
     } while (books.length % batchSize === 0);
 

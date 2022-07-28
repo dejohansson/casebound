@@ -45,8 +45,6 @@ function newBook() {
   }, 1);
 }
 
-console.log(window.innerHeight / window.innerWidth);
-
 const styles = computed(() => {
   return {
     top: `${props.yPosGenerator.next().value}px`,
