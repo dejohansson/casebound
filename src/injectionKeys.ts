@@ -1,4 +1,6 @@
-import type { InjectionKey } from "vue";
-import type LiteralApiClient from "./literal/literalApiClient";
+import type { InjectionKey } from 'vue';
+import type LiteralApiClient from './literal/literalApiClient';
 
-export const LiteralApiClientKey = Symbol("LiteralClient") as InjectionKey<LiteralApiClient>;
+export const LiteralApiClientKey = Symbol(
+  'LiteralClient'
+) as InjectionKey<LiteralApiClient>;
