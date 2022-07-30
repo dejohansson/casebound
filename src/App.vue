@@ -6,12 +6,13 @@ import ReadingStatus from './literal/models/readingStatus';
 import type LiteralApiClient from './literal/literalApiClient';
 import { shuffle, vdc } from './helpers';
 import type Book from './models/book';
+import { Mutex } from 'async-mutex';
 
 const id = import.meta.env.VITE_LITERAL_PROFILE_ID;
 const literalClient = inject(LiteralApiClientKey) as LiteralApiClient;
 const books: Ref<Book[]> = ref([]);
 const nBooks = ref(
-  Math.ceil((window.outerWidth * window.outerHeight) / 150000)
+  Math.ceil((window.outerWidth * 2 + window.outerHeight) / 250)
 );
 const bookGeneratorInstance: Ref<Generator<Book, Book, Book>> = ref(
   bookGenerator()
@@ -19,16 +20,26 @@ const bookGeneratorInstance: Ref<Generator<Book, Book, Book>> = ref(
 const yPosGeneratorInstance: Ref<Generator<number, number, number>> = ref(
   yPosGenerator()
 );
+const spawnLock = new Mutex();
+const animationSpeed = ref(Math.ceil(window.outerWidth / 40));
 
 onMounted(async () => {
   window.addEventListener('resize', setBookCount);
+  window.addEventListener('resize', setAnimationSpeed);
   books.value = await literalClient.getAllCoversByReadingStateAndProfile(
     ReadingStatus.FINISHED,
     id
   );
 });
 
-onUnmounted(() => window.removeEventListener('resize', setBookCount));
+onUnmounted(() => {
+  window.removeEventListener('resize', setBookCount);
+  window.removeEventListener('resize', setAnimationSpeed);
+});
+
+function setAnimationSpeed() {
+  animationSpeed.value = Math.ceil(window.outerWidth / 40);
+}
 
 function setBookCount() {
   nBooks.value = Math.ceil((window.outerWidth * window.outerHeight) / 150000);
@@ -58,7 +69,9 @@ function* yPosGenerator(): Generator<number, number, number> {
       :key="index"
       :bookGenerator="bookGeneratorInstance"
       :yPosGenerator="yPosGeneratorInstance"
-      :initialDelay="index / nBooks"
+      :spawnOffset="(1000 * animationSpeed) / nBooks"
+      :spawnLock="spawnLock"
+      :baseAnimationSpeed="animationSpeed"
     />
   </div>
 </template>

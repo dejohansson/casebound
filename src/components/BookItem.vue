@@ -1,48 +1,28 @@
 <script setup lang="ts">
-import { getRandomInt } from '@/helpers';
+import { delay, getRandomInt } from '@/helpers';
 import type Book from '@/models/book';
-import { computed, onMounted, onUnmounted, ref, type Ref } from 'vue';
+import type { Mutex } from 'async-mutex';
+import { computed, ref, type Ref } from 'vue';
 
 const props = defineProps<{
   bookGenerator: Generator<Book, Book, Book>;
   yPosGenerator: Generator<number, number, number>;
-  initialDelay: number;
+  spawnOffset: number;
+  spawnLock: Mutex;
+  baseAnimationSpeed: number;
 }>();
 
 const book: Ref<Book> = ref(props.bookGenerator.next().value);
 const show = ref(false);
 const animationSpeed = ref(
-  (Math.ceil(window.outerWidth / 40) * getRandomInt(90, 110)) / 100
+  props.baseAnimationSpeed * (getRandomInt(95, 115) / 100)
 );
 
-onMounted(async () => {
-  window.addEventListener('resize', setAnimationSpeed);
-});
-
-onUnmounted(() => window.removeEventListener('resize', setAnimationSpeed));
-
-function setAnimationSpeed() {
-  animationSpeed.value =
-    (Math.ceil(window.outerWidth / 40) * getRandomInt(90, 110)) / 100;
-}
-
-setTimeout(() => {
-  show.value = true;
-}, props.initialDelay * 1000 * animationSpeed.value);
-
-setTimeout(() => {
-  newBook();
-}, (props.initialDelay + 1) * 1000 * animationSpeed.value);
-
-function newBook() {
-  show.value = false;
-  book.value = props.bookGenerator.next().value;
-  setTimeout(() => {
-    show.value = true;
-    setTimeout(() => {
-      newBook();
-    }, animationSpeed.value * 1000);
-  }, 1);
+function reset() {
+  props.spawnLock.runExclusive(async () => {
+    book.value = props.bookGenerator.next().value;
+    await delay(props.spawnOffset);
+  });
 }
 
 const styles = computed(() => {
@@ -56,12 +36,17 @@ const styles = computed(() => {
     '--slide-speed': `${animationSpeed.value}s`,
   };
 });
+
+props.spawnLock.runExclusive(async () => {
+  show.value = true;
+  await delay(props.spawnOffset);
+});
 </script>
 
 <template>
-  <transition name="slide">
-    <img v-if="show" :src="book.cover" :style="styles" />
-  </transition>
+  <Transition appear name="slide" @after-enter="reset" @enter-cancelled="reset">
+    <img v-if="show" :src="book.cover" :key="book.cover" :style="styles" />
+  </Transition>
 </template>
 
 <style scoped>
@@ -77,4 +62,3 @@ img {
   transition: transform var(--slide-speed) linear;
 }
 </style>
-5

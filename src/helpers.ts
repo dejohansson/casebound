@@ -42,3 +42,13 @@ export function* vdc(
     i = (i + 1) % length;
   }
 }
+
+/**
+ * @param duration Delay duration in milliseconds
+ * @returns
+ */
+export function delay(duration: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, duration);
+  });
+}
