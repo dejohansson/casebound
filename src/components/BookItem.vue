@@ -15,13 +15,15 @@ const props = defineProps<{
 const book: Ref<Book> = ref(props.bookGenerator.next().value);
 const show = ref(false);
 const animationSpeed = ref(
-  props.baseAnimationSpeed * (getRandomInt(95, 115) / 100)
+  props.baseAnimationSpeed / (Math.log(1 - Math.random()) / -15 + 1)
 );
 
 function reset() {
+  show.value = false;
   props.spawnLock.runExclusive(async () => {
     book.value = props.bookGenerator.next().value;
     await delay(props.spawnOffset);
+    show.value = true;
   });
 }
 
@@ -45,7 +47,7 @@ props.spawnLock.runExclusive(async () => {
 
 <template>
   <Transition appear name="slide" @after-enter="reset" @enter-cancelled="reset">
-    <img v-if="show" :src="book.cover" :key="book.cover" :style="styles" />
+    <img v-if="show" :src="book.cover" :style="styles" />
   </Transition>
 </template>
 
