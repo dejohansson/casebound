@@ -61,7 +61,7 @@ props.spawnLock.runExclusive(async () => {
 
 <template>
   <Transition appear name="slide" @after-enter="reset" @enter-cancelled="reset">
-    <img v-if="show" :src="book.cover" :style="styles" />
+    <img v-if="show" :src="book.cover" :alt="book.title" :style="styles" />
   </Transition>
 </template>
 
