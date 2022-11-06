@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { delay, getRandomInt } from '@/helpers';
+import { delay } from '@/helpers';
 import type Book from '@/models/book';
 import type { Mutex } from 'async-mutex';
 import { computed, ref, type Ref } from 'vue';
@@ -21,10 +21,24 @@ const animationSpeed = ref(
 function reset() {
   show.value = false;
   props.spawnLock.runExclusive(async () => {
-    book.value = props.bookGenerator.next().value;
+    book.value = getBook();
     await delay(props.spawnOffset);
     show.value = true;
   });
+}
+
+function getBook() {
+  const volRegex = /vol\.?\s*(?<volume>\d+)/i;
+
+  while (true) {
+    const book = props.bookGenerator.next().value;
+    const volMatch = book.title.match(volRegex)?.groups?.volume;
+    const volume = volMatch ? parseInt(volMatch) : null;
+
+    if (!volume || volume / (volume + 10) < Math.random()) {
+      return book;
+    }
+  }
 }
 
 const styles = computed(() => {
