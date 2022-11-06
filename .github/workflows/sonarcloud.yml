@@ -51,7 +51,7 @@ jobs:
         with:
           node-version: 16
 
-      - run: npm ci
+      - run: npm install
 
       - name: Analyze with SonarCloud
 
