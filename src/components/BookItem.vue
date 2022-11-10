@@ -35,7 +35,7 @@ function getBook() {
     const volMatch = book.title.match(volRegex)?.groups?.volume;
     const volume = volMatch ? parseInt(volMatch) : null;
 
-    if (!volume || volume / (volume + 10) < Math.random()) {
+    if (!volume || volume / (volume + 5) < Math.random()) {
       return book;
     }
   }
