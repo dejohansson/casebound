@@ -15,6 +15,26 @@ Visualize your digital bookshelves!
 
 Legend: ✔ - _Supported_, 🚧 - _Under development_, ❌ - _Not supported_
 
+## Build
+
+Install latest npm dependencies.
+
+``` sh
+npm install
+```
+
+Build and package as a web app.
+
+``` sh
+npm run build:web
+```
+
+Build and package as a [Lively wallpaper](https://github.com/rocksdanister/lively).
+
+``` sh
+npm run build:lively
+```
+
 ## Development
 
 Clone and navigate to the repository.
