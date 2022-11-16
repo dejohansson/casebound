@@ -1,11 +1,12 @@
 {
   "name": "casebound",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check build-only",
+    "build:web": "npm run build -- --outDir=dist/web && cp -r web/. dist/web",
+    "build:lively": "npm run build -- --outDir=dist/lively  && cp -r lively/. dist/lively",
     "preview": "vite preview --port 4173",
-    "build-only": "vite build",
+    "build": "run-p type-check lint && vite build --emptyOutDir",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
