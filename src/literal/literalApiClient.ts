@@ -52,7 +52,7 @@ export default class LiteralApiClient {
       });
 
       offset += batchSize;
-    } while (books.length % batchSize === 0);
+    } while (books.length > 1 && books.length % batchSize === 0);
 
     return books;
   }

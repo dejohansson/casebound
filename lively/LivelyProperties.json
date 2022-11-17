@@ -1,1 +1,7 @@
-{}
+{
+    "apiKey": {
+        "text": "Lively User ID",
+        "type": "textbox",
+        "value": ""
+    }
+}

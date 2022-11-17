@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted, onUnmounted, ref, type Ref } from 'vue';
+import { inject, onMounted, onUnmounted, ref, watch, type Ref } from 'vue';
 import { LiteralApiClientKey } from './injectionKeys';
 import BookItem from './components/BookItem.vue';
 import ReadingStatus from './literal/models/readingStatus';
@@ -8,7 +8,10 @@ import { shuffle, vdc } from './helpers';
 import type Book from './models/book';
 import { Mutex } from 'async-mutex';
 
-const id = import.meta.env.VITE_LITERAL_PROFILE_ID;
+const props = defineProps<{
+  literalUserId: string;
+}>();
+
 const literalClient = inject(LiteralApiClientKey) as LiteralApiClient;
 const books: Ref<Book[]> = ref([]);
 const nBooks = ref(
@@ -23,12 +26,27 @@ const yPosGeneratorInstance: Ref<Generator<number, number, number>> = ref(
 const spawnLock = new Mutex();
 const animationSpeed = ref(Math.ceil(window.outerWidth / 40));
 
+watch(
+  () => props.literalUserId,
+  (uid, _) => {
+    console.log(uid);
+    literalClient
+      .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, uid)
+      .then((v) => {
+        console.log(uid);
+        books.value = v;
+        bookGeneratorInstance.value = bookGenerator();
+      });
+    console.log(uid);
+  }
+);
+
 onMounted(async () => {
   window.addEventListener('resize', setBookCount);
   window.addEventListener('resize', setAnimationSpeed);
   books.value = await literalClient.getAllCoversByReadingStateAndProfile(
     ReadingStatus.FINISHED,
-    id
+    props.literalUserId
   );
 });
 
