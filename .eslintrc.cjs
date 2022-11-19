@@ -13,6 +13,12 @@ module.exports = {
     'vue/setup-compiler-macros': true,
   },
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
     'no-constant-condition': 'off',
     'no-console': 'error',
   },

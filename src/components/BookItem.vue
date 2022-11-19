@@ -12,7 +12,7 @@ const props = defineProps<{
   baseAnimationSpeed: number;
 }>();
 
-const book: Ref<Book> = ref(props.bookGenerator.next().value);
+const book: Ref<Book | null> = ref(null);
 const show = ref(false);
 const animationSpeed = ref(
   props.baseAnimationSpeed / (Math.log(1 - Math.random()) / -15 + 1)
@@ -22,8 +22,8 @@ function reset() {
   show.value = false;
   props.spawnLock.runExclusive(async () => {
     book.value = getBook();
-    await delay(props.spawnOffset);
     show.value = true;
+    await delay(props.spawnOffset);
   });
 }
 
@@ -35,33 +35,37 @@ function getBook() {
     const volMatch = book.title.match(volRegex)?.groups?.volume;
     const volume = volMatch ? parseInt(volMatch) : null;
 
-    if (!volume || volume / (volume + 5) < Math.random()) {
+    if (!volume || volume / (volume + 1) < Math.random()) {
       return book;
     }
   }
 }
 
 const styles = computed(() => {
-  return {
-    top: `${props.yPosGenerator.next().value}px`,
-    'max-width': `${
-      (5 + 15 * (book.value.weight / 100)) *
-      (window.outerHeight / window.outerWidth)
-    }vw`,
-    'z-index': book.value.weight,
-    '--slide-speed': `${animationSpeed.value}s`,
-  };
+  return book.value == null
+    ? null
+    : {
+        top: `${props.yPosGenerator.next().value}px`,
+        'max-width': `${
+          (5 + 15 * (book.value.weight / 100)) *
+          (window.outerHeight / window.outerWidth)
+        }vw`,
+        'z-index': book.value.weight,
+        '--slide-speed': `${animationSpeed.value}s`,
+      };
 });
 
-props.spawnLock.runExclusive(async () => {
-  show.value = true;
-  await delay(props.spawnOffset);
-});
+reset();
 </script>
 
 <template>
   <Transition appear name="slide" @after-enter="reset" @enter-cancelled="reset">
-    <img v-if="show" :src="book.cover" :alt="book.title" :style="styles" />
+    <img
+      v-if="show && book != null && styles != null"
+      :src="book.cover"
+      :alt="book.title"
+      :style="styles"
+    />
   </Transition>
 </template>
 
