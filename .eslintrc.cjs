@@ -14,5 +14,6 @@ module.exports = {
   },
   rules: {
     'no-constant-condition': 'off',
+    'no-console': 'error',
   },
 };
