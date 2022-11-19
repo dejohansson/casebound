@@ -14,11 +14,10 @@ const props = reactive({
 });
 
 function livelyPropertyListener(name: string, val: string) {
-  console.log(val);
+  document.body.style.backgroundColor = val;
   switch (name) {
     case 'literalUserId':
       props.literalUserId = val;
-      console.log(props.literalUserId);
   }
 }
 

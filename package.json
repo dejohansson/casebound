@@ -4,8 +4,9 @@
   "scripts": {
     "dev": "vite",
     "build:web": "npm run build -- --outDir=dist/web && cp -r web/. dist/web",
-    "build:lively": "npm run build -- --outDir=dist/lively  && cp -r lively/. dist/lively",
-    "preview": "vite preview --port 4173",
+    "build:lively": "npm run build -- --outDir=dist/lively && cp -r lively/. dist/lively",
+    "preview:web": "vite preview --port 4173 --outDir=dist/web",
+    "preview:lively": "vite preview --port 4173 --outDir=dist/lively",
     "build": "run-p type-check lint && vite build --emptyOutDir",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"

@@ -28,16 +28,13 @@ const animationSpeed = ref(Math.ceil(window.outerWidth / 40));
 
 watch(
   () => props.literalUserId,
-  (uid, _) => {
-    console.log(uid);
+  (uid) => {
     literalClient
       .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, uid)
       .then((v) => {
-        console.log(uid);
         books.value = v;
         bookGeneratorInstance.value = bookGenerator();
       });
-    console.log(uid);
   }
 );
 
