@@ -11,12 +11,3 @@ updates:
       interval: "weekly"
     allow:
       - dependency-type: "production"
-        
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
-    ignore:
-      - dependency-type: "production"
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch", "version-update:semver-minor"]
