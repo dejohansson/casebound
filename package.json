@@ -2,9 +2,10 @@
   "name": "casebound",
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite",
-    "build:web": "npm run build -- --outDir=dist/web && cp -r web/. dist/web",
-    "build:lively": "npm run build -- --outDir=dist/lively && cp -r lively/. dist/lively",
+    "dev:web": "vite --mode web",
+    "dev:lively": "vite --mode lively",
+    "build:web": "npm run build -- --outDir=dist/web --mode web && cp -r web/. dist/web",
+    "build:lively": "npm run build -- --outDir=dist/lively --mode lively && cp -r lively/. dist/lively",
     "preview:web": "vite preview --port 4173 --outDir=dist/web",
     "preview:lively": "vite preview --port 4173 --outDir=dist/lively",
     "build": "run-p type-check lint && vite build --emptyOutDir",

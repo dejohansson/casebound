@@ -1,5 +1,6 @@
 import { createApp, h, reactive } from 'vue';
 import App from './App.vue';
+import { LivelyMode } from './constants';
 import { LiteralApiClientKey } from './injectionKeys';
 import LiteralApiClient from './literal/literalApiClient';
 
@@ -9,19 +10,15 @@ declare global {
   }
 }
 
-const props = reactive({
-  literalUserId: import.meta.env.VITE_LITERAL_PROFILE_ID as string,
-});
-
-function livelyPropertyListener(name: string, val: string) {
-  document.body.style.backgroundColor = val;
-  switch (name) {
-    case 'literalUserId':
-      props.literalUserId = val;
-  }
+if (import.meta.env.MODE === LivelyMode) {
+  window.livelyPropertyListener = (name: string, val: string) => {
+    if (name == 'literalUserId') props.literalUserId = val;
+  };
 }
 
-window.livelyPropertyListener = livelyPropertyListener;
+const props = reactive({
+  literalUserId: '',
+});
 
 createApp({ render: () => h(App, props) })
   .provide(LiteralApiClientKey, new LiteralApiClient())

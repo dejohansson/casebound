@@ -29,22 +29,24 @@ const animationSpeed = ref(Math.ceil(window.outerWidth / 40));
 watch(
   () => props.literalUserId,
   (uid) => {
-    literalClient
-      .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, uid)
-      .then((v) => {
-        books.value = v;
-        bookGeneratorInstance.value = bookGenerator();
-      });
+    if (uid)
+      literalClient
+        .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, uid)
+        .then((v) => {
+          books.value = v;
+          bookGeneratorInstance.value = bookGenerator();
+        });
   }
 );
 
 onMounted(async () => {
   window.addEventListener('resize', setBookCount);
   window.addEventListener('resize', setAnimationSpeed);
-  books.value = await literalClient.getAllCoversByReadingStateAndProfile(
-    ReadingStatus.FINISHED,
-    props.literalUserId
-  );
+  if (props.literalUserId)
+    books.value = await literalClient.getAllCoversByReadingStateAndProfile(
+      ReadingStatus.FINISHED,
+      props.literalUserId
+    );
 });
 
 onUnmounted(() => {
