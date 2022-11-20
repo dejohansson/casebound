@@ -9,10 +9,11 @@ import type Book from './models/book';
 import { Mutex } from 'async-mutex';
 
 const props = defineProps<{
-  literalUserId: string;
+  literalHandle: string;
 }>();
 
 const literalClient = inject(LiteralApiClientKey) as LiteralApiClient;
+const literalUserId: Ref<string | null> = ref(null);
 const books: Ref<Book[]> = ref([]);
 const nBooks = ref(
   Math.ceil((window.outerWidth * 2 + window.outerHeight) / 250)
@@ -27,11 +28,24 @@ const spawnLock = new Mutex();
 const animationSpeed = ref(Math.ceil(window.outerWidth / 40));
 
 watch(
-  () => props.literalUserId,
-  (uid) => {
-    if (uid)
+  () => props.literalHandle,
+  (handle) => {
+    if (handle)
       literalClient
-        .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, uid)
+        .getProfileIdByHandle(handle)
+        .then((profileId) => {
+          literalUserId.value = profileId;
+        })
+        .catch(() => null);
+  }
+);
+
+watch(
+  () => literalUserId.value,
+  (userId) => {
+    if (userId)
+      literalClient
+        .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, userId)
         .then((v) => {
           books.value = v;
           bookGeneratorInstance.value = bookGenerator();
@@ -42,11 +56,13 @@ watch(
 onMounted(async () => {
   window.addEventListener('resize', setBookCount);
   window.addEventListener('resize', setAnimationSpeed);
-  if (props.literalUserId)
-    books.value = await literalClient.getAllCoversByReadingStateAndProfile(
-      ReadingStatus.FINISHED,
-      props.literalUserId
-    );
+  if (props.literalHandle)
+    literalClient
+      .getProfileIdByHandle(props.literalHandle)
+      .then((profileId) => {
+        literalUserId.value = profileId;
+      })
+      .catch(() => null);
 });
 
 onUnmounted(() => {

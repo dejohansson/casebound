@@ -12,12 +12,12 @@ declare global {
 
 if (import.meta.env.MODE === LivelyMode) {
   window.livelyPropertyListener = (name: string, val: string) => {
-    if (name == 'literalUserId') props.literalUserId = val;
+    if (name == 'literalHandle') props.literalHandle = val;
   };
 }
 
 const props = reactive({
-  literalUserId: '',
+  literalHandle: '',
 });
 
 createApp({ render: () => h(App, props) })
