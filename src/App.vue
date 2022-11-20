@@ -24,7 +24,7 @@ const bookGeneratorInstance: Ref<Generator<Book, Book, Book>> = ref(
 const yPosGeneratorInstance: Ref<Generator<number, number, number>> = ref(
   yPosGenerator()
 );
-const spawnLock = new Mutex();
+const spawnLock = ref(new Mutex());
 const animationSpeed = ref(Math.ceil(window.outerWidth / 40));
 
 watch(
@@ -43,13 +43,16 @@ watch(
 watch(
   () => literalUserId.value,
   (userId) => {
-    if (userId)
+    if (userId) {
       literalClient
         .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, userId)
         .then((v) => {
           books.value = v;
           bookGeneratorInstance.value = bookGenerator();
         });
+      spawnLock.value.cancel();
+      spawnLock.value = new Mutex();
+    }
   }
 );
 
