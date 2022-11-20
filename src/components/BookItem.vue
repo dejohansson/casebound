@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { delay } from '@/helpers';
 import type Book from '@/models/book';
-import type { Mutex } from 'async-mutex';
-import { computed, ref, type Ref } from 'vue';
+import { E_CANCELED, type Mutex } from 'async-mutex';
+import { computed, ref, watch, type Ref } from 'vue';
 
 const props = defineProps<{
   bookGenerator: Generator<Book, Book, Book>;
@@ -18,13 +18,24 @@ const animationSpeed = ref(
   props.baseAnimationSpeed / (Math.log(1 - Math.random()) / -15 + 1)
 );
 
+watch(
+  () => props.bookGenerator,
+  () => {
+    if (!show.value) reset();
+  }
+);
+
 function reset() {
   show.value = false;
-  props.spawnLock.runExclusive(async () => {
-    book.value = getBook();
-    show.value = true;
-    await delay(props.spawnOffset);
-  });
+  props.spawnLock
+    .runExclusive(async () => {
+      book.value = getBook();
+      show.value = true;
+      await delay(props.spawnOffset);
+    })
+    .catch((e) => {
+      if (e !== E_CANCELED) throw e;
+    });
 }
 
 function getBook() {
@@ -59,13 +70,13 @@ reset();
 </script>
 
 <template>
-  <Transition appear name="slide" @after-enter="reset" @enter-cancelled="reset">
-    <img
-      v-if="show && book != null && styles != null"
-      :src="book.cover"
-      :alt="book.title"
-      :style="styles"
-    />
+  <Transition
+    v-if="show && book != null && styles != null"
+    appear
+    name="slide"
+    @after-enter="reset"
+  >
+    <img :src="book.cover" :alt="book.title" :style="styles" />
   </Transition>
 </template>
 
