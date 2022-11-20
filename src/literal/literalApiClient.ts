@@ -111,4 +111,24 @@ export default class LiteralApiClient {
       })
     ).data.reviews.map((r) => r?.rating);
   }
+
+  async getProfileIdByHandle(handle: string): Promise<string> {
+    return (
+      await this.#apolloClient.query<
+        { profile: { id: string } },
+        { handle: string }
+      >({
+        query: gql`
+          query getProfileParts($handle: String!) {
+            profile(where: { handle: $handle }) {
+              id
+            }
+          }
+        `,
+        variables: {
+          handle,
+        },
+      })
+    ).data.profile.id;
+  }
 }

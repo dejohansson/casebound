@@ -1,6 +1,6 @@
 {
-    "literalUserId": {
-        "text": "Lively User ID",
+    "literalHandle": {
+        "text": "Literal Handle",
         "type": "textbox",
         "value": ""
     }
