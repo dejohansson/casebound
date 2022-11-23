@@ -11,7 +11,7 @@ Visualize your digital bookshelves!
 | <img src="./resources/literal-logo.png" alt="logo" width="22"/>    | [Literal](https://literal.club/)              |   ✔    |                                                                                                                                                                         |
 |                                                                    | [Open&#160;Library](https://openlibrary.org/) |   🚧   |                                                                                                                                                                         |
 | <img src="./resources/goodreads-logo.png" alt="logo" width="22"/>  | [Goodreads](https://www.goodreads.com/)       |   ❌   | [Goodreads no longer issues new developer keys for their public API.](https://help.goodreads.com/s/article/Does-Goodreads-support-the-use-of-APIs)                      |
-| <img src="./resources/storygraph-logo.png" alt="logo" width="14"/> | [StoryGraph](https://www.thestorygraph.com/)  |   ❌   | As of 2022-06-26, StoryGraph does not offer a public API. Follow the development over at their [feature page](https://roadmap.thestorygraph.com/features/posts/an-api). |
+| <img src="./resources/storygraph-logo.png" alt="logo" width="22"/> | [StoryGraph](https://www.thestorygraph.com/)  |   ❌   | As of 2022-06-26, StoryGraph does not offer a public API. Follow the development over at their [feature page](https://roadmap.thestorygraph.com/features/posts/an-api). |
 
 Legend: ✔ - _Supported_, 🚧 - _Under development_, ❌ - _Not supported_
 
