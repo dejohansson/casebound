@@ -106,7 +106,7 @@ function* yPosGenerator(): Generator<number, number, number> {
       :bookGenerator="bookGeneratorInstance"
       :yPosGenerator="yPosGeneratorInstance"
       :spawnOffset="(1000 * animationSpeed) / nBooks"
-      :spawnLock="spawnLock"
+      :spawnLock="spawnLock as Mutex"
       :baseAnimationSpeed="animationSpeed"
     />
   </div>
