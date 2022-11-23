@@ -1,7 +1,7 @@
 {
-    "literalHandle": {
-        "text": "Literal Handle",
-        "type": "textbox",
-        "value": ""
-    }
+  "literalHandle": {
+    "text": "Literal Handle",
+    "type": "textbox",
+    "value": ""
+  }
 }

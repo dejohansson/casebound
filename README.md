@@ -6,18 +6,28 @@ Visualize your digital bookshelves!
 
 ## Integrations
 
-| Platform                                     | Status | Notes                                                                                                                                                                   |
-|----------------------------------------------|:------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Literal](https://literal.club/)             |   ✔   |                                                                                                                                                                         |
-| [Open Library](https://openlibrary.org/)     |   🚧   |                                                                                                                                                                         |
-| [Goodreads](https://www.goodreads.com/)      |   ❌   | [Goodreads no longer issues new developer keys for their public API.](https://help.goodreads.com/s/article/Does-Goodreads-support-the-use-of-APIs)                      |
-| [StoryGraph](https://www.thestorygraph.com/) |   ❌   | As of 2022-06-26, StoryGraph does not offer a public API. Follow the development over at their [feature page](https://roadmap.thestorygraph.com/features/posts/an-api). |
+|                                                                    | Platform                                      | Status | Notes                                                                                                                                                                   |
+|--------------------------------------------------------------------|-----------------------------------------------|:------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| <img src="./resources/literal-logo.png" alt="logo" width="22"/>    | [Literal](https://literal.club/)              |   ✔    |                                                                                                                                                                         |
+|                                                                    | [Open&#160;Library](https://openlibrary.org/) |   🚧   |                                                                                                                                                                         |
+| <img src="./resources/goodreads-logo.png" alt="logo" width="22"/>  | [Goodreads](https://www.goodreads.com/)       |   ❌   | [Goodreads no longer issues new developer keys for their public API.](https://help.goodreads.com/s/article/Does-Goodreads-support-the-use-of-APIs)                      |
+| <img src="./resources/storygraph-logo.png" alt="logo" width="22"/> | [StoryGraph](https://www.thestorygraph.com/)  |   ❌   | As of 2022-06-26, StoryGraph does not offer a public API. Follow the development over at their [feature page](https://roadmap.thestorygraph.com/features/posts/an-api). |
 
 Legend: ✔ - _Supported_, 🚧 - _Under development_, ❌ - _Not supported_
 
 ## Build
 
-Install latest npm dependencies.
+Clone and navigate to the repository.
+
+``` sh
+git clone https://github.com/dejohansson/casebound.git
+```
+
+``` sh
+cd ./casebound
+```
+
+Install the latest npm dependencies.
 
 ``` sh
 npm install
@@ -35,6 +45,8 @@ Build and package as a [Lively wallpaper](https://github.com/rocksdanister/livel
 npm run build:lively
 ```
 
+The build files can be found in the `dist` folder.
+
 ## Development
 
 Clone and navigate to the repository.
@@ -47,20 +59,20 @@ git clone https://github.com/dejohansson/casebound.git
 cd ./casebound
 ```
 
-Create local development environment varibles from the provided sample. Make sure to replace any placeholder values copied to `.env.development.local`.
-
-``` sh
-cp ./sample.env ./.env.development.local
-```
-
-Install latest npm dependencies.
+Install the latest npm dependencies.
 
 ``` sh
 npm install
 ```
 
-Start development server.
+Start the development server as a web app
 
 ``` sh
-npm run dev
+npm run dev:web
+```
+
+or as a lively wallpaper
+
+``` sh
+npm run dev:lively
 ```
