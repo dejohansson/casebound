@@ -20,7 +20,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.5",
     "async-mutex": "^0.4.0",
-    "vue": "^3.2.45"
+    "vue": "^3.2.47"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
