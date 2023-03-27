@@ -76,3 +76,4 @@ or as a lively wallpaper
 ``` sh
 npm run dev:lively
 ```
+
