@@ -1,0 +1,12 @@
+documentation:
+  - "**/*.md"
+
+dependencies:
+  - "package.json"
+  - "package-lock.json"
+
+CI/CD:
+  - ".github/**/*"
+
+literalclub:
+  - "src/literal/**/*"
