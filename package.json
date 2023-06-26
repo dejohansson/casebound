@@ -18,7 +18,7 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.15",
+    "@apollo/client": "^3.7.16",
     "async-mutex": "^0.4.0",
     "vue": "^3.3.4"
   },
