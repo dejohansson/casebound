@@ -1,12 +1,15 @@
 name: Dependabot Pull Request Approve and Merge
+
 on:
   pull_request_target:
     # Default types + 'auto_merge_disabled'.
     # This allows Dependabot PRs to be automatically merged even if the target branch is updated after auto-merge has been enabled.
     types: [opened, synchronize, reopened, auto_merge_disabled]
+
 permissions:
   pull-requests: write
   contents: write
+
 jobs:
   dependabot:
     runs-on: ubuntu-latest
@@ -15,19 +18,30 @@ jobs:
     steps:
       - name: Dependabot metadata
         id: dependabot-metadata
-        uses: dependabot/fetch-metadata@v1.3.5
+        uses: dependabot/fetch-metadata@v1.6.0
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Echo previous version'
+        run: echo "$PREV_VERSION"
+        env:
+          PREV_VERSION: ${{ steps.dependabot-metadata.outputs.previous-version }}
+
       # Only auto-approve minor and patch versions.
-      - name: Approve a PR
-        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
+      - name: Approve PR
+        if: |
+          steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' 
+          && !startsWith(steps.dependabot-metadata.outputs.previous-version, '0')
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       # Only enable auto-merge for minor and patch versions.
       - name: Enable auto-merge for Dependabot PRs
-        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
+        if: |
+          steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' 
+          && !startsWith(steps.dependabot-metadata.outputs.previous-version, '0')
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
