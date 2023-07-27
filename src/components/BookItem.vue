@@ -15,14 +15,14 @@ const props = defineProps<{
 const book: Ref<Book | null> = ref(null);
 const show = ref(false);
 const animationSpeed = ref(
-  props.baseAnimationSpeed / (Math.log(1 - Math.random()) / -15 + 1)
+  props.baseAnimationSpeed / (Math.log(1 - Math.random()) / -15 + 1),
 );
 
 watch(
   () => props.bookGenerator,
   () => {
     if (!show.value) reset();
-  }
+  },
 );
 
 function reset() {

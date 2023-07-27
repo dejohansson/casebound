@@ -24,7 +24,7 @@ export function shuffle<T>(a: Array<T>) {
  */
 export function* vdc(
   base = 2,
-  length = 4294967296
+  length = 4294967296,
 ): Generator<number, number, number> {
   let i = 0;
   while (true) {

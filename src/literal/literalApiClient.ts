@@ -24,7 +24,7 @@ export default class LiteralApiClient {
 
   async getAllCoversByReadingStateAndProfile(
     readingStatus: ReadingStatus,
-    profileId: string
+    profileId: string,
   ): Promise<Book[]> {
     const batchSize = 100;
     const books: Book[] = [];
@@ -40,7 +40,7 @@ export default class LiteralApiClient {
 
       const ratings = await this.getRatingsByBookIdsAndProfile(
         profileId,
-        literalBookBatch.map((b) => b.id)
+        literalBookBatch.map((b) => b.id),
       );
 
       literalBookBatch.forEach((book, index) => {
@@ -58,7 +58,7 @@ export default class LiteralApiClient {
   }
 
   async getCoversByReadingStateAndProfile(
-    variables: BooksByReadingStateAndProfileVariables
+    variables: BooksByReadingStateAndProfileVariables,
   ): Promise<LiteralBook[]> {
     return (
       await this.#apolloClient.query<
@@ -91,7 +91,7 @@ export default class LiteralApiClient {
 
   async getRatingsByBookIdsAndProfile(
     profileId: string,
-    bookIds: string[]
+    bookIds: string[],
   ): Promise<number[]> {
     return (
       await this.#apolloClient.query<QueryReviewsData, QueryReviewsVariables>({
