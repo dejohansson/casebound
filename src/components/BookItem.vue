@@ -39,11 +39,11 @@ function reset() {
 }
 
 function getBook() {
-  const volRegex = /vol\.?\s*(?<volume>\d+)/i;
+  const volRegex = RegExp(/vol\.?\s*(?<volume>\d+)/i);
 
   while (true) {
     const book = props.bookGenerator.next().value;
-    const volMatch = book.title.match(volRegex)?.groups?.volume;
+    const volMatch = volRegex.exec(book.title)?.groups?.volume;
     const volume = volMatch ? parseInt(volMatch) : null;
 
     if (!volume || volume / (volume + 1) < Math.random()) {
