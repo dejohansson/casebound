@@ -16,13 +16,13 @@ const literalClient = inject(LiteralApiClientKey) as LiteralApiClient;
 const literalUserId: Ref<string | null> = ref(null);
 const books: Ref<Book[]> = ref([]);
 const nBooks = ref(
-  Math.ceil((window.outerWidth * 2 + window.outerHeight) / 250)
+  Math.ceil((window.outerWidth * 2 + window.outerHeight) / 250),
 );
 const bookGeneratorInstance: Ref<Generator<Book, Book, Book>> = ref(
-  bookGenerator()
+  bookGenerator(),
 );
 const yPosGeneratorInstance: Ref<Generator<number, number, number>> = ref(
-  yPosGenerator()
+  yPosGenerator(),
 );
 const spawnLock = ref(new Mutex());
 const animationSpeed = ref(Math.ceil(window.outerWidth / 40));
@@ -37,7 +37,7 @@ watch(
           literalUserId.value = profileId;
         })
         .catch(() => null);
-  }
+  },
 );
 
 watch(
@@ -53,7 +53,7 @@ watch(
       spawnLock.value.cancel();
       spawnLock.value = new Mutex();
     }
-  }
+  },
 );
 
 onMounted(async () => {

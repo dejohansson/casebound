@@ -2,5 +2,5 @@ import type { InjectionKey } from 'vue';
 import type LiteralApiClient from './literal/literalApiClient';
 
 export const LiteralApiClientKey = Symbol(
-  'LiteralClient'
+  'LiteralClient',
 ) as InjectionKey<LiteralApiClient>;
