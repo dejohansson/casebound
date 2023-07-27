@@ -43,7 +43,7 @@ function getBook() {
 
   while (true) {
     const book = props.bookGenerator.next().value;
-    const volMatch = book.title.match(volRegex)?.groups?.volume;
+    const volMatch = RegExp(volRegex).exec(book.title)?.groups?.volume;
     const volume = volMatch ? parseInt(volMatch) : null;
 
     if (!volume || volume / (volume + 1) < Math.random()) {
