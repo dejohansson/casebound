@@ -2,7 +2,7 @@
 import { delay } from '@/helpers';
 import type Book from '@/models/book';
 import { E_CANCELED, type Mutex } from 'async-mutex';
-import { computed, ref, watch, type Ref } from 'vue';
+import { computed, ref, watch, type Ref, toRefs } from 'vue';
 
 const props = defineProps<{
   bookGenerator: Generator<Book, Book, Book>;
@@ -11,11 +11,12 @@ const props = defineProps<{
   spawnLock: Mutex;
   baseAnimationSpeed: number;
 }>();
+const { baseAnimationSpeed } = toRefs(props);
 
 const book: Ref<Book | null> = ref(null);
 const show = ref(false);
 const animationSpeed = ref(
-  props.baseAnimationSpeed / (Math.log(1 - Math.random()) / -15 + 1),
+  baseAnimationSpeed.value / (Math.log(1 - Math.random()) / -15 + 1),
 );
 
 watch(
