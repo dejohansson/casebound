@@ -35,7 +35,8 @@ jobs:
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_PR_READ_WRITE }}
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Only enable auto-merge for minor and patch versions.
       - name: Enable auto-merge for Dependabot PRs
@@ -45,4 +46,5 @@ jobs:
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_PR_READ_WRITE }}
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
