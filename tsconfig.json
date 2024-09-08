@@ -9,7 +9,6 @@
     "target": "ESNext",
     "types": ["node", "vite/client"]
   },
-
   "references": [
     {
       "path": "./tsconfig.config.json"
