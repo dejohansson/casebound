@@ -70,7 +70,7 @@ watch(
     props.librarySource,
   ],
   ([userId, source]) => {
-    if (userId && source === LibrarySource.Literal) {
+    if (source === LibrarySource.Literal) {
       if (userId) {
         literalClient
           .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, userId)
