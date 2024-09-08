@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AppProps } from './app-props';
+import { type AppProps, LibrarySource } from './app-props';
 import { inject, onMounted, onUnmounted, ref, watch, type Ref } from 'vue';
 import { LiteralApiClientKey, HardcoverApiClientKey } from './injectionKeys';
 import BookItem from './components/BookItem.vue';
@@ -44,9 +44,9 @@ watch(
 );
 
 watch(
-  () => [props.hardcoverToken, props.librarySource],
+  (): [string, LibrarySource] => [props.hardcoverToken, props.librarySource],
   ([token, source]) => {
-    if (source === 'hardcover') {
+    if (source === LibrarySource.Hardcover) {
       hardcoverClient
         .getAllReadBooks(token)
         .then((v) => {
@@ -65,9 +65,12 @@ watch(
 );
 
 watch(
-  () => [literalUserId.value, props.librarySource],
+  (): [string | null, LibrarySource] => [
+    literalUserId.value,
+    props.librarySource,
+  ],
   ([userId, source]) => {
-    if (userId && source === 'literal') {
+    if (userId && source === LibrarySource.Literal) {
       if (userId) {
         literalClient
           .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, userId)
@@ -95,14 +98,17 @@ watch(
 onMounted(async () => {
   window.addEventListener('resize', setBookCount);
   window.addEventListener('resize', setAnimationSpeed);
-  if (props.librarySource === 'literal' && props.literalHandle)
+  if (props.librarySource === LibrarySource.Literal && props.literalHandle)
     literalClient
       .getProfileIdByHandle(props.literalHandle)
       .then((profileId) => {
         literalUserId.value = profileId;
       })
       .catch(() => null);
-  else if (props.librarySource === 'hardcover' && props.hardcoverToken)
+  else if (
+    props.librarySource === LibrarySource.Hardcover &&
+    props.hardcoverToken
+  )
     hardcoverClient
       .getAllReadBooks(props.hardcoverToken)
       .then((v) => {

@@ -1,4 +1,15 @@
 {
+  "librarySource": {
+    "text": "Library Source",
+    "type": "dropdown",
+    "items": ["Hardcover", "Literal"],
+    "value": 0
+  },
+  "hardcoverToken": {
+    "text": "Hardcover Token",
+    "type": "textbox",
+    "value": ""
+  },
   "literalHandle": {
     "text": "Literal Handle",
     "type": "textbox",

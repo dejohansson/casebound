@@ -1,5 +1,10 @@
 export interface AppProps {
-  librarySource: 'literal' | 'hardcover';
+  librarySource: LibrarySource;
   literalHandle: string;
   hardcoverToken: string;
+}
+
+export enum LibrarySource {
+  Hardcover,
+  Literal,
 }
