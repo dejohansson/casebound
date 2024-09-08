@@ -62,6 +62,12 @@ const styles = computed(() => {
           (5 + 15 * (book.value.weight / 100)) *
           (window.outerHeight / window.outerWidth)
         }vw`,
+        'min-width': `${
+          5 +
+          15 *
+            (book.value.weight / 100) *
+            (window.outerHeight / window.outerWidth)
+        }vw`,
         'z-index': book.value.weight,
         '--slide-speed': `${animationSpeed.value}s`,
       };

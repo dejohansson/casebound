@@ -1,8 +1,10 @@
 import { createApp, h, reactive } from 'vue';
 import App from './App.vue';
+import type { AppProps } from './app-props';
 import { LivelyMode } from './constants';
-import { LiteralApiClientKey } from './injectionKeys';
-import LiteralApiClient from './literal/literalApiClient';
+import { LiteralApiClientKey, HardcoverApiClientKey } from './injectionKeys';
+import LiteralApiClient from './integrations/literal/literalApiClient';
+import HardcoverApiClient from './integrations/hardcover/hardcoverApiClient';
 
 declare global {
   interface Window {
@@ -10,16 +12,29 @@ declare global {
   }
 }
 
+const props = reactive<AppProps>({
+  librarySource: 'hardcover',
+  literalHandle: '',
+  hardcoverToken: '',
+});
+
 if (import.meta.env.MODE === LivelyMode) {
   window.livelyPropertyListener = (name: string, val: string) => {
-    if (name == 'literalHandle') props.literalHandle = val;
+    switch (name) {
+      case 'librarySource':
+        props.librarySource = val as AppProps['librarySource'];
+        break;
+      case 'literalHandle':
+        props.literalHandle = val;
+        break;
+      case 'hardcoverToken':
+        props.hardcoverToken = val;
+        break;
+    }
   };
 }
 
-const props = reactive({
-  literalHandle: '',
-});
-
 createApp({ render: () => h(App, props) })
   .provide(LiteralApiClientKey, new LiteralApiClient())
+  .provide(HardcoverApiClientKey, new HardcoverApiClient())
   .mount('#app');
