@@ -10,3 +10,6 @@ CI/CD:
 
 literalclub:
   - "src/literal/**/*"
+
+hardcover:
+  - "src/hardcover/**/*"

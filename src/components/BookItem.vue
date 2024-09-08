@@ -58,10 +58,8 @@ const styles = computed(() => {
     ? null
     : {
         top: `${props.yPosGenerator.next().value}px`,
-        'max-width': `${
-          (5 + 15 * (book.value.weight / 100)) *
-          (window.outerHeight / window.outerWidth)
-        }vw`,
+        'max-width': `${(25 + book.value.weight * 0.75) / 5}vh`,
+        'min-width': `${(25 + book.value.weight * 0.75) / 5}vh`,
         'z-index': book.value.weight,
         '--slide-speed': `${animationSpeed.value}s`,
       };

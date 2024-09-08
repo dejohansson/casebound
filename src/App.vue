@@ -1,29 +1,32 @@
 <script setup lang="ts">
+import { type AppProps, LibrarySource } from './app-props';
 import { inject, onMounted, onUnmounted, ref, watch, type Ref } from 'vue';
-import { LiteralApiClientKey } from './injectionKeys';
+import { LiteralApiClientKey, HardcoverApiClientKey } from './injectionKeys';
 import BookItem from './components/BookItem.vue';
-import ReadingStatus from './literal/models/readingStatus';
-import type LiteralApiClient from './literal/literalApiClient';
+import ReadingStatus from './integrations/literal/models/readingStatus';
+import type LiteralApiClient from './integrations/literal/literalApiClient';
+import type HardcoverApiClient from './integrations/hardcover/hardcoverApiClient';
 import { shuffle, vdc } from './helpers';
 import type Book from './models/book';
 import { Mutex } from 'async-mutex';
 
-const props = defineProps<{
-  literalHandle: string;
-}>();
+const props = defineProps<AppProps>();
 
-const literalClient = inject(LiteralApiClientKey) as LiteralApiClient;
+const literalClient = inject<LiteralApiClient>(
+  LiteralApiClientKey,
+) as LiteralApiClient;
+const hardcoverClient = inject<HardcoverApiClient>(
+  HardcoverApiClientKey,
+) as HardcoverApiClient;
 const literalUserId: Ref<string | null> = ref(null);
 const books: Ref<Book[]> = ref([]);
 const nBooks = ref(
   Math.ceil((window.outerWidth * 2 + window.outerHeight) / 250),
 );
-const bookGeneratorInstance: Ref<Generator<Book, Book, Book>> = ref(
-  bookGenerator(),
-);
-const yPosGeneratorInstance: Ref<Generator<number, number, number>> = ref(
-  yPosGenerator(),
-);
+const bookGeneratorInstance: Ref<Generator<Book, Book, Book>> =
+  ref(bookGenerator());
+const yPosGeneratorInstance: Ref<Generator<number, number, number>> =
+  ref(yPosGenerator());
 const spawnLock = ref(new Mutex());
 const animationSpeed = ref(Math.ceil(window.outerWidth / 40));
 
@@ -41,17 +44,53 @@ watch(
 );
 
 watch(
-  () => literalUserId.value,
-  (userId) => {
-    if (userId) {
-      literalClient
-        .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, userId)
+  (): [string, LibrarySource] => [props.hardcoverToken, props.librarySource],
+  ([token, source]) => {
+    if (source === LibrarySource.Hardcover) {
+      hardcoverClient
+        .getAllReadBooks(token)
         .then((v) => {
           books.value = v;
+        })
+        .catch(() => {
+          books.value = [];
+        })
+        .finally(() => {
           bookGeneratorInstance.value = bookGenerator();
+          spawnLock.value.cancel();
+          spawnLock.value = new Mutex();
         });
-      spawnLock.value.cancel();
-      spawnLock.value = new Mutex();
+    }
+  },
+);
+
+watch(
+  (): [string | null, LibrarySource] => [
+    literalUserId.value,
+    props.librarySource,
+  ],
+  ([userId, source]) => {
+    if (source === LibrarySource.Literal) {
+      if (userId) {
+        literalClient
+          .getAllCoversByReadingStateAndProfile(ReadingStatus.FINISHED, userId)
+          .then((v) => {
+            books.value = v;
+          })
+          .catch(() => {
+            books.value = [];
+          })
+          .finally(() => {
+            bookGeneratorInstance.value = bookGenerator();
+            spawnLock.value.cancel();
+            spawnLock.value = new Mutex();
+          });
+      } else {
+        books.value = [];
+        bookGeneratorInstance.value = bookGenerator();
+        spawnLock.value.cancel();
+        spawnLock.value = new Mutex();
+      }
     }
   },
 );
@@ -59,11 +98,22 @@ watch(
 onMounted(async () => {
   window.addEventListener('resize', setBookCount);
   window.addEventListener('resize', setAnimationSpeed);
-  if (props.literalHandle)
+  if (props.librarySource === LibrarySource.Literal && props.literalHandle)
     literalClient
       .getProfileIdByHandle(props.literalHandle)
       .then((profileId) => {
         literalUserId.value = profileId;
+      })
+      .catch(() => null);
+  else if (
+    props.librarySource === LibrarySource.Hardcover &&
+    props.hardcoverToken
+  )
+    hardcoverClient
+      .getAllReadBooks(props.hardcoverToken)
+      .then((v) => {
+        books.value = v;
+        bookGeneratorInstance.value = bookGenerator();
       })
       .catch(() => null);
 });
