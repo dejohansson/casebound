@@ -33,6 +33,8 @@ on:
     branches: ['main']
   pull_request:
     branches: ['main']
+  schedule:
+    - cron: '0 0 1 * *' # execute the workflow every first day of the month
   workflow_dispatch:
 
 permissions:
