@@ -1,19 +1,21 @@
 documentation:
-  - changed-files:
-      - any-glob-to-any-file: "**/*.md"
+- changed-files:
+  - any-glob-to-any-file: "**/*.md"
 
 dependencies:
-  - changed-files:
-      - any-glob-to-any-file: ["package.json", "package-lock.json"]
+- changed-files:
+  - any-glob-to-any-file: 
+    - "package.json"
+    - "package-lock.json"
 
 CI/CD:
-  - changed-files:
-      - any-glob-to-any-file: ".github/**/*"
+- changed-files:
+  - any-glob-to-any-file: ".github/**/*"
 
 literalclub:
-  - changed-files:
-      - any-glob-to-any-file: "src/literal/**/*"
+- changed-files:
+  - any-glob-to-any-file: "src/literal/**/*"
 
 hardcover:
-  - changed-files:
-      - any-glob-to-any-file: "src/hardcover/**/*"
+- changed-files:
+  - any-glob-to-any-file: "src/hardcover/**/*"
