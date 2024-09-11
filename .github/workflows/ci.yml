@@ -11,10 +11,11 @@ jobs:
     name: Run CI Checks
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4.1.7
 
-      - uses: actions/setup-node@v4.0.3
+      - name: Setup Node
+        uses: actions/setup-node@v4.0.3
         with:
           node-version-file: 'package.json'
           cache: 'npm'
