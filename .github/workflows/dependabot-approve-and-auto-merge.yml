@@ -16,22 +16,22 @@ jobs:
     # Makes sure it's a dependabot PR.
     # if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-      - name: Dependabot metadata
-        id: dependabot-metadata
-        uses: dependabot/fetch-metadata@v2.2.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Dependabot metadata
+      #   id: dependabot-metadata
+      #   uses: dependabot/fetch-metadata@v2.2.0
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Echo previous version'
-        run: echo "$PREV_VERSION"
-        env:
-          PREV_VERSION: ${{ steps.dependabot-metadata.outputs.previous-version }}
+      # - name: 'Echo previous version'
+      #   run: echo "$PREV_VERSION"
+      #   env:
+      #     PREV_VERSION: ${{ steps.dependabot-metadata.outputs.previous-version }}
 
       # Only auto-approve minor and patch versions.
       - name: Approve PR
-        if: |
-          steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' 
-          && !startsWith(steps.dependabot-metadata.outputs.previous-version, '0')
+        # if: |
+        #   steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
+        #   && !startsWith(steps.dependabot-metadata.outputs.previous-version, '0')
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
