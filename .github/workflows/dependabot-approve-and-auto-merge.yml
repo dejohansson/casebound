@@ -1,7 +1,7 @@
 name: Dependabot Pull Request Approve and Merge
 
 on:
-  pull_request_target:
+  pull_request:
     # Default types + 'auto_merge_disabled'.
     # This allows Dependabot PRs to be automatically merged even if the target branch is updated after auto-merge has been enabled.
     types: [opened, synchronize, reopened, auto_merge_disabled]
