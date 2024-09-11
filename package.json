@@ -15,8 +15,8 @@
     "updates": "npx npm-check-updates  -u"
   },
   "engines": {
-    "npm": "^10.8.2",
-    "node": "^20.17.0"
+    "npm": ">=9.6.5",
+    "node": ">=20.17.0"
   },
   "dependencies": {
     "@apollo/client": "3.11.8",
