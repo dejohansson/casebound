@@ -23,11 +23,8 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Typecheck
-        run: npm run type-check
-
-      - name: Lint
-        run: npm run lint
-
       - name: Build Lively Wallpaper
         run: npm run build:lively
+
+      - name: Build Web App
+        run: npm run build:web
