@@ -14,7 +14,7 @@ Visualize your digital bookshelves!
 | [<img src="./resources/storygraph-logo.png" alt="logo" width="22"/> StoryGraph](https://www.thestorygraph.com/) |   ❌   | As of 2022-06-26, StoryGraph does not offer a public API. Follow the development over at their [feature page](https://roadmap.thestorygraph.com/features/posts/an-api). |
 | [<img src="./resources/goodreads-logo.png" alt="logo" width="21"/> Goodreads](https://www.goodreads.com/)       |   ❌   | [Goodreads no longer issues new developer keys for their public API.](https://help.goodreads.com/s/article/Does-Goodreads-support-the-use-of-APIs)                      |
 
-Legend: ✔ - _Supported_, 🚧 - _Under development_, ❌ - _Not supported_
+✔ - _Supported_, 🚧 - _Under development_, ❌ - _Not supported_
 
 ## Build
 
