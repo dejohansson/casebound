@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "vue.vscode-typescript-vue-plugin",
     "esbenp.prettier-vscode",
     "sonarsource.sonarlint-vscode",
     "dbaeumer.vscode-eslint"
