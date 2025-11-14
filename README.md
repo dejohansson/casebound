@@ -6,7 +6,7 @@ Visualize your digital bookshelves!
 
 ## Integrations
 
-| Platform&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                            | Status | Notes                                                                                                                                                                   |
+| Platform&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                      | Status | Notes                                                                                                                                                                   |
 |-----------------------------------------------------------------------------------------------------------------|:------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [<img src="./resources/hardcover-logo.png" alt="logo" width="17"/> Hardcover](https://hardcover.app/)           |   ✔    | [API Docs](https://github.com/hardcoverapp/hardcover-docs)                                                                                                              |
 | [<img src="./resources/literal-logo.png" alt="logo" width="17"/> Literal](https://literal.club/)                |   ✔    |                                                                                                                                                                         |
